@@ -22,6 +22,7 @@
 ## Return objects
 
 `mpdsocket` parses the output from the [MPD protocol](http://www.musicpd.org/doc/protocol/) into a JavaScript object. This object has three meta-attributes that mpdsocket adds:
+
 * `_OK` denotes that the request was completed successfully.
 * `_error` is the error returned if `_OK` is false.
 * `_ordered_list` denotes that the object is an ordered list (see section below).
