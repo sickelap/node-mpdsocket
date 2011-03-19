@@ -2,8 +2,17 @@ var net = require('net');
 var sys = require('sys');
 
 function mpdSocket(host,port) {
-	if (!host) this.host = "localhost";
-	if (!port) this.port = 6600;
+	if (!host) { 
+		this.host = "localhost";
+	} else {
+		this.host = host;
+	}
+
+	if (!port){
+		this.port = 6600;
+	} else {
+		this.port = port;
+	}
 
 	this.open(host,port);
 }
@@ -13,6 +22,8 @@ mpdSocket.prototype = {
 	isOpen: false,
 	socket: null,
 	version: "0",
+	host: null,
+	port: null,
 
 	handleData: function(data) {
 		var response = new Object;
@@ -20,7 +31,7 @@ mpdSocket.prototype = {
 		var i = 0;
 		for (var l in lines) {
 			if (lines[l].match(/^ACK/)) {
-				response._error = lines[l].substr(13);
+				response._error = lines[l].substr(10);
 				response._OK = false;
 				this.callbacks.shift()(response)
 				return;
@@ -79,7 +90,10 @@ mpdSocket.prototype = {
 			this.callbacks.push(callback);
 			this.socket.write(req + "\n");
 		} else {
-			throw "mpdNotOpenException";
+			this.open(host,port);
+			this.on('connect',function() {
+				this.send(req,callback);
+			});
 		}
 	}
 }
