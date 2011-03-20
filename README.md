@@ -1,6 +1,6 @@
 # node-mpdsocket
 
-`mpdsocket` is a node.js client for MPD. It is loosely based on (but much better than) [robinduckett/node-mpd](https://www.github.com/robinduckett/node-mpd).
+`mpdsocket` is a node.js client for MPD. It is loosely based on (but aims to be more usable than) [robinduckett/node-mpd](https://www.github.com/robinduckett/node-mpd).
 
 ## Usage
 
