@@ -47,7 +47,7 @@ mpdSocket.prototype = {
 				var value = lines[l].substr((lines[l].indexOf(":"))+1);
 				value = value.replace(/^\s+|\s+$/g, ''); // trim whitespace
 				if (!(response._ordered_list)) {
-					if (typeof(response[attr]) != 'undefined') {
+					if (typeof(response[attr]) != 'undefined' || attr == "playlist" || attr == "file" || attr == "directory") {
 						//make ordered list
 						var tempResponse = { 1: {} };
 						tempResponse[++i] = response;
@@ -59,7 +59,7 @@ mpdSocket.prototype = {
 						response[attr] = value;
 					}
 				} else {
-					if (typeof(response[i][attr]) != 'undefined') {
+					if (typeof(response[i][attr]) != 'undefined' || attr == "playlist" || attr == "file" || attr == "directory") {
 						response[++i] = new Object;
 						response[i][attr] = value;
 					} else {
@@ -90,7 +90,7 @@ mpdSocket.prototype = {
 			this.callbacks.push(callback);
 			this.socket.write(req + "\n");
 		} else {
-			this.open(host,port);
+			this.open(this.host,this.port);
 			this.on('connect',function() {
 				this.send(req,callback);
 			});
