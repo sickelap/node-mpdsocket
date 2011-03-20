@@ -14,7 +14,7 @@ function mpdSocket(host,port) {
 		this.port = port;
 	}
 
-	this.open(host,port);
+	this.open(this.host,this.port);
 }
 
 mpdSocket.prototype = {
@@ -47,7 +47,7 @@ mpdSocket.prototype = {
 				var value = lines[l].substr((lines[l].indexOf(":"))+1);
 				value = value.replace(/^\s+|\s+$/g, ''); // trim whitespace
 				if (!(response._ordered_list)) {
-					if (typeof(response[attr]) != 'undefined' || attr == "playlist" || attr == "file" || attr == "directory") {
+					if (typeof(response[attr]) != 'undefined') {
 						//make ordered list
 						var tempResponse = { 1: {} };
 						tempResponse[++i] = response;
@@ -90,9 +90,10 @@ mpdSocket.prototype = {
 			this.callbacks.push(callback);
 			this.socket.write(req + "\n");
 		} else {
+			var self = this;
 			this.open(this.host,this.port);
 			this.on('connect',function() {
-				this.send(req,callback);
+				self.send(req,callback);
 			});
 		}
 	}
