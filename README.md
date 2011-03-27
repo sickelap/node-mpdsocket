@@ -39,3 +39,8 @@ Some MPD commands, like `listplaylists`, will return an ordered list of objects.
 	  _ordered_list: true,
 	  _OK: true
 	}
+
+### License
+`node-mpdsocket` is made available under the [MIT License](http://www.opensource.org/licenses/mit-license.php). A copy of the license is distributed with this software.
+
+Copyright (c) 2011 Eli Wenig

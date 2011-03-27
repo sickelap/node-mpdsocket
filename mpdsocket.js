@@ -1,3 +1,14 @@
+/*******
+** node-mpdsocket :: an MPD library for node.js
+**
+** author: Eli Wenig (http://eliwenig.com/) <eli@csh.rit.edu>
+**
+** copyright (c) 2011 Eli Wenig
+** licensed under the MIT license
+**   http://www.opensource.org/licenses/mit-license.php
+**
+*******/
+
 var net = require('net');
 var sys = require('sys');
 
@@ -38,7 +49,7 @@ mpdSocket.prototype = {
 			} else if (lines[l].match(/^OK MPD/)) {
 				this.version = lines[l].split(' ')[2];
 				return;
-			} else if (lines[l].match(/^OK/)) {
+			} else if (lines[l].match(/^OK$/)) {
 				response._OK = true;
 				this.callbacks.shift()(response);
 				return;
