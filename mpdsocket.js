@@ -46,6 +46,7 @@ mpdSocket.prototype = {
 				this.response._error = lines[l].substr(10);
 				this.response._OK = false;
 				this.callbacks.shift()(this.response)
+				this.response = {};
 				return;
 			} else if (lines[l].match(/^OK MPD/)) {
 				if (this.version == "0") {
@@ -56,6 +57,7 @@ mpdSocket.prototype = {
 				this.response._OK = true;
 				i = 0;
 				this.callbacks.shift()(this.response);
+				this.response = {};
 				return;
 			} else {
 				var attr = lines[l].substr(0,lines[l].indexOf(":"));
