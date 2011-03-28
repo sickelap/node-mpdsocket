@@ -31,6 +31,8 @@ function mpdSocket(host,port) {
 mpdSocket.prototype = {
 	callbacks: [],
 	commands: [],
+	i: 0,
+	response: {},
 	isOpen: false,
 	socket: null,
 	version: "0",
@@ -38,44 +40,48 @@ mpdSocket.prototype = {
 	port: null,
 
 	handleData: function(data) {
-		var response = new Object;
 		var lines = data.split("\n");
-		var i = 0;
 		for (var l in lines) {
 			if (lines[l].match(/^ACK/)) {
-				response._error = lines[l].substr(10);
-				response._OK = false;
-				this.callbacks.shift()(response)
+				this.response._error = lines[l].substr(10);
+				this.response._OK = false;
+				this.callbacks.shift()(this.response)
 				return;
 			} else if (lines[l].match(/^OK MPD/)) {
-				this.version = lines[l].split(' ')[2];
-				return;
+				if (this.version == "0") {
+					this.version = lines[l].split(' ')[2];
+					return;
+				}
 			} else if (lines[l].match(/^OK$/)) {
-				response._OK = true;
-				this.callbacks.shift()(response);
+				this.response._OK = true;
+				i = 0;
+				this.callbacks.shift()(this.response);
 				return;
 			} else {
 				var attr = lines[l].substr(0,lines[l].indexOf(":"));
 				var value = lines[l].substr((lines[l].indexOf(":"))+1);
 				value = value.replace(/^\s+|\s+$/g, ''); // trim whitespace
-				if (!(response._ordered_list)) {
-					if (typeof(response[attr]) != 'undefined') {
+				if (this.response._ordered_list != true) {
+					if (typeof(this.response[attr]) != 'undefined') {
 						//make ordered list
-						var tempResponse = { 1: {} };
-						tempResponse[++i] = response;
-						response = tempResponse;
-						response._ordered_list = true;
-						response[++i] = new Object;
-						response[i][attr] = value;
+						console.log("Made ordered list!");
+						console.log("OL was " + this.response._ordered_list);
+						var tempResponse = new Object;
+						tempResponse[++(this.i)] = this.response;
+						this.response = tempResponse;
+						this.response._ordered_list = true;
+						console.log("OL is now " + this.response._ordered_list);
+						this.response[++(this.i)] = new Object;
+						this.response[this.i][attr] = value;
 					} else {
-						response[attr] = value;
+						this.response[attr] = value;
 					}
 				} else {
-					if (typeof(response[i][attr]) != 'undefined' || attr == "playlist" || attr == "file" || attr == "directory") {
-						response[++i] = new Object;
-						response[i][attr] = value;
+					if (typeof(this.response[(this.i)][attr]) != 'undefined' || attr == "playlist" || attr == "file" || attr == "directory") {
+						this.response[++(this.i)] = new Object;
+						this.response[this.i][attr] = value;
 					} else {
-						response[i][attr] = value;
+						this.response[this.i][attr] = value;
 					}
 				}
 			}
