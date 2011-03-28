@@ -30,6 +30,7 @@ function mpdSocket(host,port) {
 
 mpdSocket.prototype = {
 	callbacks: [],
+	commands: [],
 	isOpen: false,
 	socket: null,
 	version: "0",
@@ -91,15 +92,20 @@ mpdSocket.prototype = {
 			this.socket = net.createConnection(port,host);
 			this.socket.setEncoding('UTF-8');
 			this.socket.addListener('connect',function() { self.isOpen = true; });
-			this.socket.addListener('data',function(data) { self.handleData.call(self,data); });
+			this.socket.addListener('data',function(data) { self.handleData.call(self,data); self._send(); });
 			this.socket.addListener('end',function() { self.isOpen = false; });
 		}
+	},
+
+	_send: function() {
+		if (this.commands.length != 0) this.socket.write(this.commands.shift() + "\n");
 	},
 
 	send: function(req,callback) {
 		if (this.isOpen) {
 			this.callbacks.push(callback);
-			this.socket.write(req + "\n");
+			this.commands.push(req);
+			if (this.commands.length == 1) this._send();
 		} else {
 			var self = this;
 			this.open(this.host,this.port);
