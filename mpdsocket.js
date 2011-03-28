@@ -4,7 +4,7 @@
 ** author: Eli Wenig (http://eliwenig.com/) <eli@csh.rit.edu>
 **
 ** copyright (c) 2011 Eli Wenig
-** licensed under the MIT license
+** made available under the MIT license
 **   http://www.opensource.org/licenses/mit-license.php
 **
 *******/
