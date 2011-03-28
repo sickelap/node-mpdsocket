@@ -64,13 +64,10 @@ mpdSocket.prototype = {
 				if (this.response._ordered_list != true) {
 					if (typeof(this.response[attr]) != 'undefined') {
 						//make ordered list
-						console.log("Made ordered list!");
-						console.log("OL was " + this.response._ordered_list);
 						var tempResponse = new Object;
 						tempResponse[++(this.i)] = this.response;
 						this.response = tempResponse;
 						this.response._ordered_list = true;
-						console.log("OL is now " + this.response._ordered_list);
 						this.response[++(this.i)] = new Object;
 						this.response[this.i][attr] = value;
 					} else {
