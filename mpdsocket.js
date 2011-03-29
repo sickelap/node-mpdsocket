@@ -55,7 +55,7 @@ mpdSocket.prototype = {
 				}
 			} else if (lines[l].match(/^OK$/)) {
 				this.response._OK = true;
-				i = 0;
+				this.i = 0;
 				this.callbacks.shift()(this.response);
 				this.response = {};
 				return;
