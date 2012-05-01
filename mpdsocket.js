@@ -12,6 +12,14 @@
 var net = require('net');
 
 function mpdSocket(host,port) {
+	this.callbacks = [];
+	this.commands = [];
+	this.i = 0;
+	this.response = {};
+	this.isOpen = false;
+	this.socket = null;
+	this.version = "0";
+
 	if (!host) {
 		this.host = "localhost";
 	} else {
@@ -28,16 +36,6 @@ function mpdSocket(host,port) {
 }
 
 mpdSocket.prototype = {
-	callbacks: [],
-	commands: [],
-	i: 0,
-	response: {},
-	isOpen: false,
-	socket: null,
-	version: "0",
-	host: null,
-	port: null,
-
 	handleData: function(data) {
 		var lines = data.split("\n");
 		for (var l in lines) {
