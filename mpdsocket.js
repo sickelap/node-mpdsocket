@@ -10,10 +10,9 @@
 *******/
 
 var net = require('net');
-var sys = require('sys');
 
 function mpdSocket(host,port) {
-	if (!host) { 
+	if (!host) {
 		this.host = "localhost";
 	} else {
 		this.host = host;
@@ -86,11 +85,11 @@ mpdSocket.prototype = {
 			}
 		}
 	},
-	
+
 	on: function(event, fn) {
 		this.socket.on(event,fn);
 	},
-		
+
 	open: function(host,port) {
 		var self = this;
 		if (!(this.isOpen)) {
