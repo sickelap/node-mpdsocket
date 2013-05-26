@@ -40,7 +40,7 @@ mpdSocket.prototype = {
 		var lines = data.split("\n");
 		for (var l in lines) {
 			if (lines[l].match(/^ACK/)) {
-				this.response._error = lines[l].substr(10);
+				this.response._error = lines[l].split('} ').[1];
 				this.response._OK = false;
 				this.callbacks.shift()(this.response)
 				this.response = {};
